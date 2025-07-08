@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Retirement Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      background: black;
+    }
+
+    body {
+      background-image: url('background.jpg'); /* Dein Bild */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .content {
+      position: absolute;
+      top: 120px;        /* Abstand vom oberen Rand */
+      right: 360px;      /* Abstand vom rechten Rand */
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 1.5em 2em;
+      border-radius: 1em;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 0.5em;
+      letter-spacing: 1px;
+    }
+
+    .counter {
+      font-size: 4em;
+      font-weight: bold;
+    }
+
+    .unit {
+      font-size: 1.2em;
+      margin-left: 0.4em;
+      vertical-align: middle;
+    }
+
+    .date {
+      font-size: 1em;
+      margin-top: 0.5em;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>Days Left Until Retirement</h1>
+    <div>
+      <span class="counter" id="daysLeft">...</span>
+      <span class="unit">days</span>
+    </div>
+    <div class="date">Target date: December 31, 2031</div>
+  </div>
+
+  <script>
+    function updateCountdown() {
+      const targetDate = new Date("2031-12-31T00:00:00");
+      const today = new Date();
+      const diffTime = targetDate - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById("daysLeft").textContent = diffDays;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 60 * 60 * 1000); // stündlich
+  </script>
+</body>
+</html>
