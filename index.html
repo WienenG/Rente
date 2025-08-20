@@ -5,54 +5,60 @@
   <title>Retirement Countdown</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* Basis: volle Höhe auf allen Geräten (inkl. mobiler Browserleisten) */
+    /* === Proportionale Positionierung: Basiswerte anpassen, falls du eine andere Design-Referenz nutzt === */
+    :root{
+      --base-w: 1920;   /* Referenz-Breite, z.B. dein Desktop beim Entwurf */
+      --base-h: 1080;   /* Referenz-Höhe */
+      --base-top: 120;  /* ursprüngliches top in px */
+      --base-right: 360;/* ursprüngliches right in px */
+    }
+
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      min-height: 100dvh; /* modernes dynamisches Viewport-Unit */
+      min-height: 100dvh;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
       background: black;
     }
 
-    /* Hintergrundbild: immer bildschirmfüllend */
     body {
       background-image: url('background.jpg');
-      background-size: cover;       /* skaliert auf Vollfläche */
-      background-position: center;  /* zentriert Motiv */
-      background-repeat: no-repeat; /* kein Kacheln */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
-    /* Leicht abdunkeln für bessere Lesbarkeit des Textes */
+    /* Lesbarkeits-Overlay */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0,0,0,.35);
       pointer-events: none;
     }
 
-    /* Layout: top-right, aber responsiv und mit Rändern je nach Viewport */
-    .page {
-      min-height: 100dvh;
-      display: grid;
-      padding: clamp(12px, 3vw, 48px);
-    }
-
+    /* Die Box: FIXED + proportionale Offsets */
     .content {
-      place-self: start end;  /* oben rechts ausrichten */
-      background-color: rgba(0, 0, 0, 0.6);
+      position: fixed;
+      /* skaliert 120px (base-top) proportional mit der aktuellen Höhe */
+      top: calc(var(--base-top) * 100dvh / var(--base-h));
+      /* skaliert 360px (base-right) proportional mit der aktuellen Breite */
+      right: calc(var(--base-right) * 100dvw / var(--base-w));
+
+      background-color: rgba(0,0,0,0.6);
       padding: clamp(1rem, 2.2vw, 2rem) clamp(1.2rem, 3vw, 2.4rem);
       border-radius: 1rem;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
       text-align: center;
-      backdrop-filter: blur(2px); /* dezent, falls unterstützt */
+      backdrop-filter: blur(2px);
+      max-width: min(90vw, 520px);
     }
 
     h1 {
       font-size: clamp(1.2rem, 2.2vw, 1.8rem);
-      margin: 0 0 0.5em;
+      margin: 0 0 .5em;
       letter-spacing: 1px;
     }
 
@@ -64,51 +70,46 @@
 
     .unit {
       display: inline-block;
-      font-size: clamp(0.9rem, 1.6vw, 1.2rem);
-      margin-left: 0.4em;
+      font-size: clamp(.9rem, 1.6vw, 1.2rem);
+      margin-left: .4em;
       vertical-align: middle;
-      opacity: 0.95;
+      opacity: .95;
     }
 
     .date {
-      font-size: clamp(0.85rem, 1.4vw, 1rem);
-      margin-top: 0.65em;
-      opacity: 0.9;
+      font-size: clamp(.85rem, 1.4vw, 1rem);
+      margin-top: .65em;
+      opacity: .9;
     }
 
-    /* Kleinere Screens: Box etwas weiter vom Rand weg & zentrierbar */
-    @media (max-width: 520px) {
-      .content { place-self: start stretch; }
+    /* Safety: auf sehr kleinen Screens die Box etwas vom Rand weghalten */
+    @media (max-width: 420px) {
+      .content {
+        right: clamp(8px, 4vw, 16px);
+        top: clamp(8px, 6vw, 24px);
+      }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="content">
-      <h1>Days Left Until Retirement</h1>
-      <div>
-        <span class="counter" id="daysLeft">...</span>
-        <span class="unit">days</span>
-      </div>
-      <div class="date">Target date: July 24, 2031</div>
+  <div class="content">
+    <h1>Days Left Until Retirement</h1>
+    <div>
+      <span class="counter" id="daysLeft">...</span>
+      <span class="unit">days</span>
     </div>
+    <div class="date">Target date: July 24, 2031</div>
   </div>
 
   <script>
     function updateCountdown() {
-      // Lokales Mitternacht-Ziel am 2031-07-24
-      const targetDate = new Date(2031, 6, 24); // Monate 0-11, also 6 = Juli
+      const targetDate = new Date(2031, 6, 24); // 0=Jan, also 6=July
       const now = new Date();
-
-      // Differenz in Tagen (auf volle Tage aufrunden)
       const msPerDay = 1000 * 60 * 60 * 24;
       const diffDays = Math.ceil((targetDate - now) / msPerDay);
-
       document.getElementById("daysLeft").textContent = Math.max(diffDays, 0);
     }
-
     updateCountdown();
-    // stündlich aktualisieren reicht völlig
     setInterval(updateCountdown, 60 * 60 * 1000);
   </script>
 </body>
