@@ -5,10 +5,9 @@
   <title>Retirement Countdown</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* === Proportionale Positionierung: Basiswerte anpassen, falls du eine andere Design-Referenz nutzt === */
     :root{
-      --base-w: 1920;   /* Referenz-Breite, z.B. dein Desktop beim Entwurf */
-      --base-h: 1080;   /* Referenz-Höhe */
+      --base-w: 1920;   /* Referenzbreite */
+      --base-h: 1080;   /* Referenzhöhe */
       --base-top: 120;  /* ursprüngliches top in px */
       --base-right: 360;/* ursprüngliches right in px */
     }
@@ -30,23 +29,11 @@
       background-repeat: no-repeat;
     }
 
-    /* Lesbarkeits-Overlay */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.35);
-      pointer-events: none;
-    }
-
-    /* Die Box: FIXED + proportionale Offsets */
+    /* Box mit dynamischer Positionierung */
     .content {
       position: fixed;
-      /* skaliert 120px (base-top) proportional mit der aktuellen Höhe */
       top: calc(var(--base-top) * 100dvh / var(--base-h));
-      /* skaliert 360px (base-right) proportional mit der aktuellen Breite */
       right: calc(var(--base-right) * 100dvw / var(--base-w));
-
       background-color: rgba(0,0,0,0.6);
       padding: clamp(1rem, 2.2vw, 2rem) clamp(1.2rem, 3vw, 2.4rem);
       border-radius: 1rem;
@@ -82,7 +69,6 @@
       opacity: .9;
     }
 
-    /* Safety: auf sehr kleinen Screens die Box etwas vom Rand weghalten */
     @media (max-width: 420px) {
       .content {
         right: clamp(8px, 4vw, 16px);
