@@ -1,82 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Retirement Countdown</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* Basis: volle Höhe auf allen Geräten (inkl. mobiler Browserleisten) */
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
+      min-height: 100dvh; /* modernes dynamisches Viewport-Unit */
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
       background: black;
     }
 
+    /* Hintergrundbild: immer bildschirmfüllend */
     body {
-      background-image: url('background.jpg'); /* Dein Bild */
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+      background-image: url('background.jpg');
+      background-size: cover;       /* skaliert auf Vollfläche */
+      background-position: center;  /* zentriert Motiv */
+      background-repeat: no-repeat; /* kein Kacheln */
+    }
+
+    /* Leicht abdunkeln für bessere Lesbarkeit des Textes */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      pointer-events: none;
+    }
+
+    /* Layout: top-right, aber responsiv und mit Rändern je nach Viewport */
+    .page {
+      min-height: 100dvh;
+      display: grid;
+      padding: clamp(12px, 3vw, 48px);
     }
 
     .content {
-      position: absolute;
-      top: 120px;        /* Abstand vom oberen Rand */
-      right: 360px;      /* Abstand vom rechten Rand */
+      place-self: start end;  /* oben rechts ausrichten */
       background-color: rgba(0, 0, 0, 0.6);
-      padding: 1.5em 2em;
-      border-radius: 1em;
+      padding: clamp(1rem, 2.2vw, 2rem) clamp(1.2rem, 3vw, 2.4rem);
+      border-radius: 1rem;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
       text-align: center;
+      backdrop-filter: blur(2px); /* dezent, falls unterstützt */
     }
 
     h1 {
-      font-size: 1.8em;
-      margin-bottom: 0.5em;
+      font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+      margin: 0 0 0.5em;
       letter-spacing: 1px;
     }
 
     .counter {
-      font-size: 4em;
-      font-weight: bold;
+      font-size: clamp(2.2rem, 7vw, 4rem);
+      font-weight: 800;
+      line-height: 1;
     }
 
     .unit {
-      font-size: 1.2em;
+      display: inline-block;
+      font-size: clamp(0.9rem, 1.6vw, 1.2rem);
       margin-left: 0.4em;
       vertical-align: middle;
+      opacity: 0.95;
     }
 
     .date {
-      font-size: 1em;
-      margin-top: 0.5em;
+      font-size: clamp(0.85rem, 1.4vw, 1rem);
+      margin-top: 0.65em;
       opacity: 0.9;
+    }
+
+    /* Kleinere Screens: Box etwas weiter vom Rand weg & zentrierbar */
+    @media (max-width: 520px) {
+      .content { place-self: start stretch; }
     }
   </style>
 </head>
 <body>
-  <div class="content">
-    <h1>Days Left Until Retirement</h1>
-    <div>
-      <span class="counter" id="daysLeft">...</span>
-      <span class="unit">days</span>
+  <div class="page">
+    <div class="content">
+      <h1>Days Left Until Retirement</h1>
+      <div>
+        <span class="counter" id="daysLeft">...</span>
+        <span class="unit">days</span>
+      </div>
+      <div class="date">Target date: July 24, 2031</div>
     </div>
-    <div class="date">Target date: July, 24, 2031</div>
   </div>
 
   <script>
     function updateCountdown() {
-      const targetDate = new Date("2031-07-24T00:00:00");
-      const today = new Date();
-      const diffTime = targetDate - today;
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      document.getElementById("daysLeft").textContent = diffDays;
+      // Lokales Mitternacht-Ziel am 2031-07-24
+      const targetDate = new Date(2031, 6, 24); // Monate 0-11, also 6 = Juli
+      const now = new Date();
+
+      // Differenz in Tagen (auf volle Tage aufrunden)
+      const msPerDay = 1000 * 60 * 60 * 24;
+      const diffDays = Math.ceil((targetDate - now) / msPerDay);
+
+      document.getElementById("daysLeft").textContent = Math.max(diffDays, 0);
     }
 
     updateCountdown();
-    setInterval(updateCountdown, 60 * 60 * 1000); // stündlich
+    // stündlich aktualisieren reicht völlig
+    setInterval(updateCountdown, 60 * 60 * 1000);
   </script>
 </body>
 </html>
