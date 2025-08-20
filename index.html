@@ -5,13 +5,6 @@
   <title>Retirement Countdown</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root{
-      --base-w: 1920;   /* Referenzbreite */
-      --base-h: 1080;   /* Referenzhöhe */
-      --base-top: 120;  /* ursprüngliches top in px */
-      --base-right: 360;/* ursprüngliches right in px */
-    }
-
     html, body {
       margin: 0;
       padding: 0;
@@ -29,51 +22,43 @@
       background-repeat: no-repeat;
     }
 
-    /* Box mit dynamischer Positionierung */
+    /* Box skaliert mit dem Viewport */
     .content {
       position: fixed;
-      top: calc(var(--base-top) * 100dvh / var(--base-h));
-      right: calc(var(--base-right) * 100dvw / var(--base-w));
+      top: 12vh;    /* früher 120px → 12% von 1000px Höhe */
+      right: 18vw;  /* früher 360px → ~18% von 1920px Breite */
       background-color: rgba(0,0,0,0.6);
-      padding: clamp(1rem, 2.2vw, 2rem) clamp(1.2rem, 3vw, 2.4rem);
-      border-radius: 1rem;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      padding: 2vh 2.5vw;
+      border-radius: 1em;
+      box-shadow: 0 0 2vh rgba(0,0,0,0.4);
       text-align: center;
       backdrop-filter: blur(2px);
-      max-width: min(90vw, 520px);
+      max-width: 90vw;
     }
 
     h1 {
-      font-size: clamp(1.2rem, 2.2vw, 1.8rem);
-      margin: 0 0 .5em;
-      letter-spacing: 1px;
+      font-size: clamp(1rem, 2.5vw, 2rem);
+      margin: 0 0 0.5em;
+      letter-spacing: 0.05em;
     }
 
     .counter {
-      font-size: clamp(2.2rem, 7vw, 4rem);
+      font-size: clamp(2rem, 8vw, 5rem);
       font-weight: 800;
       line-height: 1;
     }
 
     .unit {
-      display: inline-block;
-      font-size: clamp(.9rem, 1.6vw, 1.2rem);
-      margin-left: .4em;
+      font-size: clamp(0.8rem, 2vw, 1.4rem);
+      margin-left: 0.4em;
       vertical-align: middle;
-      opacity: .95;
+      opacity: 0.95;
     }
 
     .date {
-      font-size: clamp(.85rem, 1.4vw, 1rem);
-      margin-top: .65em;
-      opacity: .9;
-    }
-
-    @media (max-width: 420px) {
-      .content {
-        right: clamp(8px, 4vw, 16px);
-        top: clamp(8px, 6vw, 24px);
-      }
+      font-size: clamp(0.8rem, 1.6vw, 1.2rem);
+      margin-top: 0.6em;
+      opacity: 0.9;
     }
   </style>
 </head>
@@ -89,7 +74,7 @@
 
   <script>
     function updateCountdown() {
-      const targetDate = new Date(2031, 6, 24); // 0=Jan, also 6=July
+      const targetDate = new Date(2031, 6, 24); // 0=Jan, 6=July
       const now = new Date();
       const msPerDay = 1000 * 60 * 60 * 24;
       const diffDays = Math.ceil((targetDate - now) / msPerDay);
@@ -100,5 +85,3 @@
   </script>
 </body>
 </html>
-
-
